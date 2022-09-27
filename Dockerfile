@@ -66,10 +66,12 @@ RUN chmod +x /usr/bin/celery-commands
 COPY celery-cmd /usr/bin/celery-cmd
 RUN chmod +x /usr/bin/celery-cmd
 
-# # Install "geonode-contribs" apps
-# RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
-# # Install logstash and centralized dashboard dependencies
-# RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
+# Install "geonode-contribs" apps
+RUN cd /usr/src; git clone https://github.com/labepn/geonode-contribs.git
+#RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
+# Install logstash and centralized dashboard dependencies
+RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade -e .
+#RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
 #     cd /usr/src/geonode-contribs/ldap; pip install --upgrade  -e .
 
 RUN pip install --upgrade --no-cache-dir  --src /usr/src -r requirements.txt
@@ -77,6 +79,24 @@ RUN pip install --upgrade  -e .
 
 # Cleanup apt update lists
 RUN rm -rf /var/lib/apt/lists/*
+# Change language - added by Mirko
+#COPY ./plugin-proba/* /usr/src/
+RUN rm -rf /usr/local/lib/python3.10/site-packages/django/conf/locale/hr/*
+RUN rm -rf /usr/local/lib/python3.10/site-packages/django/conf/locale/sr/*
+RUN rm -rf /usr/local/lib/python3.10/site-packages/django/conf/locale/__init__.py
+RUN rm -rf /usr/local/lib/python3.10/site-packages/django/conf/locale/sr/__pycache__/*
+COPY ./izmene-django/hr/* /usr/local/lib/python3.10/site-packages/django/conf/locale/hr/
+COPY ./izmene-django/sr/* /usr/local/lib/python3.10/site-packages/django/conf/locale/sr/
+COPY ./izmene-django/__init__.py /usr/local/lib/python3.10/site-packages/django/conf/locale/
+COPY ./izmene-django/__pycache__/* /usr/local/lib/python3.10/site-packages/django/conf/locale/__pycache__/
+RUN rm -rf /usr/local/lib/python3.10/site-packages/django/contrib/admin/locale/hr/*
+COPY ./izmene-django-admin/* /usr/local/lib/python3.10/site-packages/django/contrib/admin/locale/hr/
+#RUN rm -rf /usr/src/django-geonode-mapstore-client/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/footer.html
+#COPY ./izmene-django/footer.html /usr/src/django-geonode-mapstore-client/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/
+#RUN rm -rf /usr/src/django-geonode-mapstore-client/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/brand_navbar.html
+#COPY ./izmene-django/brand_navbar.html /usr/src/django-geonode-mapstore-client/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/
+#RUN rm -rf /usr/src/django-geonode-mapstore-client/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/search_bar.html
+#COPY ./izmene-django/search_bar.html /usr/src/django-geonode-mapstore-client/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/
 
 # Export ports
 EXPOSE 8000

@@ -222,6 +222,9 @@ _DEFAULT_LANGUAGES = """(
     ('ja', '日本語'),
     ('ko', '한국어'),
     ('sk', 'Slovensky'),
+    ('sr-latn', 'Srpski'),
+    ('sr', 'Српски'),
+    ('hr','Srpski'),
 )"""
 
 LANGUAGES = ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
@@ -1990,14 +1993,14 @@ SOCIALACCOUNT_PROFILE_EXTRACTORS = {
 }
 
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
-
+INVITATIONS_CONFIRMATION_URL_NAME = "geonode.invitations:accept-invite"
 
 # Choose thumbnail generator -- this is the default generator
 THUMBNAIL_GENERATOR = os.environ.get(
     'THUMBNAIL_GENERATOR', 'geonode.thumbs.thumbnails.create_gs_thumbnail_geonode')
 
 THUMBNAIL_SIZE = {
-    'width': int(os.environ.get('THUMBNAIL_GENERATOR_DEFAULT_SIZE_WIDTH', 240)),
+    'width': int(os.environ.get('THUMBNAIL_GENERATOR_DEFAULT_SIZE_WIDTH', 500)),
     'height': int(os.environ.get('THUMBNAIL_GENERATOR_DEFAULT_SIZE_HEIGHT', 200))
 }
 
@@ -2225,3 +2228,11 @@ SUPPORTED_DATASET_FILE_TYPES = [
         "needsFiles": ["shp", "prj", "dbf", "shx", "csv", "tiff", "zip", "xml"]
     }
 ]
+
+if 'geonode_logstash' not in INSTALLED_APPS:
+    INSTALLED_APPS += ('geonode_logstash',)
+
+    CELERY_BEAT_SCHEDULE['dispatch_metrics'] = {
+        'task': 'geonode_logstash.tasks.dispatch_metrics',
+        'schedule': 3600.0,
+    }

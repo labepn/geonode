@@ -195,10 +195,10 @@
               <ul class="dropdown-menu">
                 <li><a href="{% dataset_list_url %}">{% trans "Datasets" %}</a></li>
                 <li><a href="{% document_list_url %}">{% trans "Documents" %}</a></li>
-                <li><a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote Services" %}</a></li>
+                <li><a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote services" %}</a></li>
                 {% if user.is_superuser or user.is_staff %}
                   {%  if "add_resource" in user.perms %}
-                    <li><a href="{% url "register_service" %}">{% trans "Add Remote Service" %}</a></li>
+                    <li><a href="{% url "register_service" %}">{% trans "Add remote service" %}</a></li>
                   {% endif %}
                 {% endif %}
               </ul>
@@ -383,8 +383,8 @@
           {% block contactus %}
           {% endblock contactus %}
           <ul class="list-unstyled">
-            <li>{% trans "Powered by" %} <a href="http://geonode.org">{% trans "GeoNode" %}</a>{% if user.is_staff %} <em>{% trans "version" %} {{ VERSION }}</em>{% endif %}</li>
-            <li><a href="{% url "developer" %}">{% trans "Developers" %}</a> | <a href="{% url "about" %}">{% trans "About" %}</a><li>
+            <li>{% trans "Powered by" %} <a href="https://upravazasume.gov.rs/"><b>{% trans "Uprava za šume Republike Srbije" %}</b></a>{% if user.is_staff %} <em>{% trans "version" %} {{ VERSION }}</em>{% endif %}</li>
+            <li><a href="https://fao.org/"><b>{% trans "FAO" %}</b></a> | <a href="https://mapsoft.rs"><b>{% trans "MapSoft" %}</b></a><li>
           </ul>
           <label class="hidden">{% trans "Language" %}</label>
           {% if csrf_token != "NOTPROVIDED" %}
